@@ -22,3 +22,11 @@ Použití Microsoft SQL Server a Entity Framework.
 ### Formát Produktu v aplikaci:
 Id, Ean, Description, Quantity, Price, Currency, Categories
 
+## Roadmap
+* Creation of Database project (tables and dependencies) [DONE]
+* Creation of DataAccess project using Dapper instead of EF, to be able access the data from MS SQL in C# code [DONE]
+* Creation of CatalogAPI project, to set Swagger and different CRUD methods [DONE]
+* Implementing complex property (List of categories) to ProductModel, sending and receiving data [DONE]
+* Implementing the Price restriction when Price can be updated only once in 12 hours [DONE]
+* Implementing GET filter method to get only products from specific category [DONE]
+* Getting ready to implement pagination and daily import function [INPROGRESS]
