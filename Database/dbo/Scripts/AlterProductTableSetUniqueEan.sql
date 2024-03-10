@@ -1,0 +1,2 @@
+﻿ALTER TABLE dbo.Product
+ADD CONSTRAINT UC_Ean UNIQUE (Ean);
