@@ -22,6 +22,3 @@ Použití Microsoft SQL Server a Entity Framework.
 ### Formát Produktu v aplikaci:
 Id, Ean, Description, Quantity, Price, Currency, Categories
 
-## Roadmap
-* Updated Readme information
-
