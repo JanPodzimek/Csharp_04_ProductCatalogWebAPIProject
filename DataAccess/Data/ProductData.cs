@@ -19,7 +19,7 @@ public class ProductData : IProductData
         _db = db;
     }
 
-    public async Task<IEnumerable<ProductModel>> GetProducts()
+    public async Task<IEnumerable<IProductModel>> GetProducts()
     {
         var products = await _db.LoadData<ProductModel, dynamic>("spProduct_GetAll", new { });
 
@@ -41,7 +41,7 @@ public class ProductData : IProductData
         return products;
     }
 
-    public async Task<IEnumerable<ProductModel>> GetProductsByCategory(int id)
+    public async Task<IEnumerable<IProductModel>> GetProductsByCategory(int id)
     {
         var products = await _db.LoadData<ProductModel, dynamic>("spProduct_GetByCategory", new { Id = id });
 
@@ -67,7 +67,7 @@ public class ProductData : IProductData
     }
 
 
-    public async Task<ProductModel?> GetProduct(int id)
+    public async Task<IProductModel?> GetProduct(int id)
     {
         var result = await _db.LoadData<ProductModel, dynamic>("spProduct_Get", new { Id = id });
         
