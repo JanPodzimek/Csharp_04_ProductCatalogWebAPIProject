@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Models;
 
-public class ProductModel
+public class ProductModel : IProductModel
 {
     public int Id { get; set; }
     [Required]
