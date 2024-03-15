@@ -166,7 +166,7 @@ public static class Api
     /// </remarks>
     private static async Task<IResult> PutProductAddCategory(ProductPutAddCategoryModel product, IProductData data)
     {
-        ProductModel? existingProduct = await Task.Run(() => data.GetProduct(product.ProductId).Result);
+        IProductModel? existingProduct = await Task.Run(() => data.GetProduct(product.ProductId).Result);
 
         if (existingProduct == null) return Results.NotFound($"Product with ID {product.ProductId} was not found.");
         ProductPutAddCategoryModel ppacm = new ProductPutAddCategoryModel()
