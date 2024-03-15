@@ -27,10 +27,13 @@ jednou dennì z XML souboru pomocí pozadové služby.
 
 #### Database / Databáze:
 * Microsoft SQL Server
-* Entity Framework
+* Dapper
 
-### Product format in app / Formát Produktu v aplikaci:
-Id, Ean, Description, Quantity, Price, Currency, Categories
+#### Product format in app / Formát Produktu v aplikaci:
+Id, Ean, Description, Quantity, Price, Categories
+
+#### Category format in app / Formát Kategorie v aplikaci:
+Id, Name
 
 ## Roadmap
 * Creation of Database project (tables and dependencies) [DONE]
