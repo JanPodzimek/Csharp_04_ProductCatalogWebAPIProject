@@ -1,13 +1,13 @@
 ﻿using DataAccess.DbAccess;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace CatalogAPI;
+namespace CatalogAPI.API;
 
 public static class Api
 {
     public static void ConfigureApi(this WebApplication app)
     {
-        
+
         app.MapGet("/Products", GetProducts);
         app.MapGet("/Products/FilterByCategoryId/{id}", GetProductsByCategory);
         app.MapGet("/Products/{id}", GetProduct);
