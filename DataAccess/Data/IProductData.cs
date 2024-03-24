@@ -8,6 +8,7 @@ public interface IProductData
     Task<IEnumerable<IProductModel>> GetProductsByCategory(int id);
     Task<IProductModel?> GetProduct(int id);
     Task<ProductPutModel?> GetProductByEan(string ean);
+    Task<int> GetProductCount();
     Task PostProduct(ProductPostModel product);
     Task PutProduct(ProductPutModel product);
     Task PutProductAddCateogry(ProductPutAddCategoryModel product);

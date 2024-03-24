@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace DataAccess.Models;
 
@@ -35,9 +36,9 @@ public class ProductPostModel
 public class ProductPutModel
 {
     [Required]
-    public string Ean { get; set; }
+    public string? Ean { get; set; }
     [Required]
-    public string Description { get; set; }
+    public string? Description { get; set; }
     public int Price { get; set; }
     [JsonIgnore]
     public DateTime PriceUpdated { get; set; }

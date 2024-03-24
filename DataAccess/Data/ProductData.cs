@@ -23,8 +23,7 @@ public class ProductData : IProductData
     {
         var products = await _db.LoadData<ProductModel, dynamic>("spProduct_GetAll", new { });
 
-        List<ProductCategoryModel> productCategories = await Task.Run(() => _db.LoadData<ProductCategoryModel,
-            dynamic>("spProductCategory_GetAll", new { }).Result.ToList());
+        IEnumerable<ProductCategoryModel> productCategories = await _db.LoadData<ProductCategoryModel, dynamic>("spProductCategory_GetAll", new { });
 
         foreach (var productCategory in productCategories)
         {
@@ -45,8 +44,7 @@ public class ProductData : IProductData
     {
         var products = await _db.LoadData<ProductModel, dynamic>("spProduct_GetByCategory", new { Id = id });
 
-        List<ProductCategoryModel> productCategories = await Task.Run(() => _db.LoadData<ProductCategoryModel,
-            dynamic>("spProductCategory_GetByCategory", new { Id = id }).Result.ToList());
+        IEnumerable<ProductCategoryModel> productCategories = await _db.LoadData<ProductCategoryModel, dynamic>("spProductCategory_GetByCategory", new { Id = id });
 
         foreach (var productCategory in productCategories)
         {
@@ -70,11 +68,11 @@ public class ProductData : IProductData
     public async Task<IProductModel?> GetProduct(int id)
     {
         var result = await _db.LoadData<ProductModel, dynamic>("spProduct_Get", new { Id = id });
-        
-        List<ProductCategoryModel> productCategories = await Task.Run(() => _db.LoadData<ProductCategoryModel,
-            dynamic>("spProductCategory_Get", new { Id = id }).Result.ToList());
+
+        IEnumerable<ProductCategoryModel> productCategories = await _db.LoadData<ProductCategoryModel, dynamic>("spProductCategory_Get", new { Id = id });
 
         List<CategoryModel> categories = new List<CategoryModel>();
+        
         ProductModel? product = result.FirstOrDefault();
 
         if (product != null)
@@ -87,8 +85,10 @@ public class ProductData : IProductData
                     Name = productCategory.CategoryName,
                     IsMain = productCategory.IsMain
                 };
+                
                 categories.Add(category);
             }
+            
             product.Categories = categories;
         }
 
@@ -101,6 +101,12 @@ public class ProductData : IProductData
         ProductPutModel? product = result.FirstOrDefault();
 
         return product;
+    }
+
+    public async Task<int> GetProductCount()
+    {
+        var result = await _db.LoadData<ProductModel, dynamic>("spProduct_GetCount", new { });
+        return result.Count();
     }
 
     public Task PostProduct(ProductPostModel product)
@@ -118,18 +124,22 @@ public class ProductData : IProductData
     public Task PutProduct(ProductPutModel newProductData)
     {
         TimeSpan twelveHours = TimeSpan.FromHours(12);
+        ProductPutModel? existingProductData = new ProductPutModel();
 
-        ProductPutModel? oldProductData = GetProductByEan(newProductData.Ean).Result;
+        if (newProductData.Ean != null)
+        {
+            existingProductData = GetProductByEan(newProductData.Ean).Result;
+        }
 
-        if (oldProductData != null) {
-            if (DateTime.Now - oldProductData.PriceUpdated > twelveHours
-                && newProductData.Price != oldProductData.Price)
+        if (existingProductData != null) {
+            if (DateTime.Now - existingProductData.PriceUpdated > twelveHours
+                && newProductData.Price != existingProductData.Price)
             {
                 newProductData.PriceUpdated = DateTime.Now;
                 return _db.SaveData("spProduct_PutPriceUpdated", newProductData);
             }
 
-            newProductData.PriceUpdated = oldProductData.PriceUpdated;
+            newProductData.PriceUpdated = existingProductData.PriceUpdated;
 
             if (newProductData.PriceUpdated == DateTime.MinValue)
                 // just piece of trash data passed to stored procedure so it would not throw an exception

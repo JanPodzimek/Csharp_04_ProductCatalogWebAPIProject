@@ -1,7 +1,10 @@
 
 using System.Reflection;
+using CatalogAPI.API;
 using DataAccess.Data;
 using DataAccess.DbAccess;
+using Services;
+using StatusService;
 
 namespace CatalogAPI
 {
@@ -32,6 +35,8 @@ namespace CatalogAPI
 
             builder.Services.AddSingleton<ISqlDataAccess, SqlDataAccess>();
             builder.Services.AddSingleton<IProductData, ProductData>();
+            builder.Services.AddHostedService<StatusLogger>();
+            builder.Services.AddHostedService<ProductImport>();
 
             var app = builder.Build();
 

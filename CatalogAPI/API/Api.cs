@@ -1,13 +1,13 @@
 ﻿using DataAccess.DbAccess;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace CatalogAPI;
+namespace CatalogAPI.API;
 
 public static class Api
 {
     public static void ConfigureApi(this WebApplication app)
     {
-        
+
         app.MapGet("/Products", GetProducts);
         app.MapGet("/Products/FilterByCategoryId/{id}", GetProductsByCategory);
         app.MapGet("/Products/{id}", GetProduct);
@@ -20,11 +20,18 @@ public static class Api
     /// <summary>
     /// Retrieve all products
     /// </summary>
-    private static async Task<IResult> GetProducts(IProductData data)
+    private static async Task<IResult> GetProducts(IProductData data, int page = 1, int pageSize = 3)
     {
+        var totalCount = await data.GetProductCount();
+        var totalPages = (int)Math.Ceiling((decimal)totalCount / pageSize);
+
+        IEnumerable<IProductModel> products = await data.GetProducts();
+
+        var productsPerPage = products.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
         try
         {
-            return Results.Ok(await data.GetProducts());
+            return Results.Ok(productsPerPage);
         }
         catch (Exception ex)
         {
@@ -125,9 +132,9 @@ public static class Api
     /// <summary>
     /// Find a product by EAN and update it
     /// </summary>
-    private static async Task<IResult> PutProduct(ProductPutModel product, IProductData data)
+    public static async Task<IResult> PutProduct(ProductPutModel product, IProductData data)
     {
-        ProductPutModel? existingProduct = await Task.Run(() => data.GetProductByEan(product.Ean).Result);
+        ProductPutModel? existingProduct = await data.GetProductByEan(product.Ean);
 
         if (existingProduct == null) return Results.NotFound($"Product with ID {product.Ean} was not found.");
 
@@ -166,7 +173,7 @@ public static class Api
     /// </remarks>
     private static async Task<IResult> PutProductAddCategory(ProductPutAddCategoryModel product, IProductData data)
     {
-        ProductModel? existingProduct = await Task.Run(() => data.GetProduct(product.ProductId).Result);
+        IProductModel? existingProduct = await data.GetProduct(product.ProductId);
 
         if (existingProduct == null) return Results.NotFound($"Product with ID {product.ProductId} was not found.");
         ProductPutAddCategoryModel ppacm = new ProductPutAddCategoryModel()
