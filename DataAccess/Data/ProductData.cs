@@ -103,6 +103,12 @@ public class ProductData : IProductData
         return product;
     }
 
+    public async Task<int> GetProductCount()
+    {
+        var result = await _db.LoadData<ProductModel, dynamic>("spProduct_GetCount", new { });
+        return result.Count();
+    }
+
     public Task PostProduct(ProductPostModel product)
     {
         //Version for inserting more than 1 category at once that I have implemented before
@@ -118,18 +124,22 @@ public class ProductData : IProductData
     public Task PutProduct(ProductPutModel newProductData)
     {
         TimeSpan twelveHours = TimeSpan.FromHours(12);
+        ProductPutModel? existingProductData = new ProductPutModel();
 
-        ProductPutModel? oldProductData = GetProductByEan(newProductData.Ean).Result;
+        if (newProductData.Ean != null)
+        {
+            existingProductData = GetProductByEan(newProductData.Ean).Result;
+        }
 
-        if (oldProductData != null) {
-            if (DateTime.Now - oldProductData.PriceUpdated > twelveHours
-                && newProductData.Price != oldProductData.Price)
+        if (existingProductData != null) {
+            if (DateTime.Now - existingProductData.PriceUpdated > twelveHours
+                && newProductData.Price != existingProductData.Price)
             {
                 newProductData.PriceUpdated = DateTime.Now;
                 return _db.SaveData("spProduct_PutPriceUpdated", newProductData);
             }
 
-            newProductData.PriceUpdated = oldProductData.PriceUpdated;
+            newProductData.PriceUpdated = existingProductData.PriceUpdated;
 
             if (newProductData.PriceUpdated == DateTime.MinValue)
                 // just piece of trash data passed to stored procedure so it would not throw an exception

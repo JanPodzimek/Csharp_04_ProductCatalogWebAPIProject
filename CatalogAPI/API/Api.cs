@@ -20,11 +20,18 @@ public static class Api
     /// <summary>
     /// Retrieve all products
     /// </summary>
-    private static async Task<IResult> GetProducts(IProductData data)
+    private static async Task<IResult> GetProducts(IProductData data, int page = 1, int pageSize = 3)
     {
+        var totalCount = await data.GetProductCount();
+        var totalPages = (int)Math.Ceiling((decimal)totalCount / pageSize);
+
+        IEnumerable<IProductModel> products = await data.GetProducts();
+
+        var productsPerPage = products.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
         try
         {
-            return Results.Ok(await data.GetProducts());
+            return Results.Ok(productsPerPage);
         }
         catch (Exception ex)
         {
@@ -125,7 +132,7 @@ public static class Api
     /// <summary>
     /// Find a product by EAN and update it
     /// </summary>
-    private static async Task<IResult> PutProduct(ProductPutModel product, IProductData data)
+    public static async Task<IResult> PutProduct(ProductPutModel product, IProductData data)
     {
         ProductPutModel? existingProduct = await data.GetProductByEan(product.Ean);
 

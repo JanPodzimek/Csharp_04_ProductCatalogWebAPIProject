@@ -1,20 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-using DataAccess.Models;
+﻿using CatalogAPI.API;
+using CatalogAPI.XMLFeed;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using StatusService;
 
 namespace Services;
 public class ProductImport : BackgroundService
 {
     private readonly ILogger<ProductImport> _logger;
-    private HttpClient _httpClient;
-    private TimeSpan _timeout = TimeSpan.FromSeconds(10);
+    private TimeSpan _timeout = TimeSpan.FromSeconds(5);
+    public XMLProductParser _xMLProductParser = new XMLProductParser();
 
     public ProductImport(ILogger<ProductImport> logger)
     {
@@ -23,13 +17,12 @@ public class ProductImport : BackgroundService
 
     public override Task StartAsync(CancellationToken cancellationToken)
     {
-        _httpClient = new HttpClient();
+        ApiHelper.InitializeClient();
         return base.StartAsync(cancellationToken);
     }
 
     public override Task StopAsync(CancellationToken cancellationToken)
     {
-        _httpClient.Dispose();
         return base.StopAsync(cancellationToken);
     }
 
@@ -37,13 +30,23 @@ public class ProductImport : BackgroundService
     {
         while (!stoppingToken.IsCancellationRequested)
         {
-            try
+            var feed = _xMLProductParser.ParseXml();
+
+            if (feed != null)
             {
-                
+                foreach (var feedItem in feed)
+                {
+                    ProductPutModel? productPutModel = feedItem;
+                    
+                    
+                    
+                }
+                    
+                //_logger.LogInformation($"Products were successfully updated at {DateTime.Now}");
             }
-            catch (Exception ex)
+            else
             {
-                _logger.LogError(ex, "An error occurred while processing XML data.");
+                _logger.LogError("An error occurred while processing XML data.");
             }
 
             await Task.Delay(_timeout, stoppingToken);

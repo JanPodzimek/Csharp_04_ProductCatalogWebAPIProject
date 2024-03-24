@@ -42,4 +42,5 @@ Id, Name
 * Implementing complex property (List of categories) to ProductModel, sending and receiving data [**DONE**]
 * Implementing the Price restriction when Price can be updated only once in 12 hours [**DONE**]
 * Implementing GET filter method to get only products from specific category [**DONE**]
+* Implementing pagination system to GetProducts method [**DONE**]
 * Implementing daily import function [**INPROGRESS**]

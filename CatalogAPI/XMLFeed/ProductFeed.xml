@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Catalog>
+	<Product>
+		<EAN>ASDF01</EAN>
+		<DESCRIPTION>Apple iPhone 13</DESCRIPTION>
+		<PRICE>28000</PRICE>
+		<QUANTITY>6</QUANTITY>
+	</Product>
+</Catalog>

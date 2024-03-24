@@ -84,6 +84,7 @@
     <Build Include="dbo\StoredProcedures\spProduct_GetByCategory.sql" />
     <Build Include="dbo\StoredProcedures\spProductCategory_GetByCategory.sql" />
     <Build Include="dbo\StoredProcedures\spProduct_PutProductAddCategory.sql" />
+    <Build Include="dbo\StoredProcedures\spProduct_GetCount.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PublishLocations\Script.PostDeployment.sql" />
