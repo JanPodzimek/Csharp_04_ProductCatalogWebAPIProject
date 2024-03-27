@@ -6,4 +6,10 @@
 		<PRICE>28000</PRICE>
 		<QUANTITY>6</QUANTITY>
 	</Product>
+	<Product>
+		<EAN>ASDF94</EAN>
+		<DESCRIPTION>Night Lamp</DESCRIPTION>
+		<PRICE>650</PRICE>
+		<QUANTITY>10</QUANTITY>
+	</Product>
 </Catalog>

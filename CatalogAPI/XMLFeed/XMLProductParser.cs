@@ -20,7 +20,7 @@ public class XMLProductParser
         {
             XDocument doc = XDocument.Load(SourcePathLocal); 
 
-            List<ProductPutModel> products = doc.Descendants("Product").Select(p => new ProductPutModel
+            return doc.Descendants("Product").Select(p => new ProductPutModel
             {
                 Ean = p.Element("EAN")?.Value,
                 Description = p.Element("DESCRIPTION")?.Value,
@@ -28,8 +28,6 @@ public class XMLProductParser
                 Price = int.Parse(p.Element("PRICE").Value),
                 Quantity = int.Parse(p.Element("QUANTITY").Value)
             }).ToList();
-
-            return products;
         }
         catch (XmlException exception)
         {

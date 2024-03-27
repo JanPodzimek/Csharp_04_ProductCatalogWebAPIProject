@@ -4,11 +4,11 @@ namespace DataAccess.Data;
 public interface IProductData
 {
 
-    Task<IEnumerable<IProductModel>> GetProducts();
-    Task<IEnumerable<IProductModel>> GetProductsByCategory(int id);
-    Task<IProductModel?> GetProduct(int id);
-    Task<ProductPutModel?> GetProductByEan(string ean);
-    Task<int> GetProductCount();
+    Task<IEnumerable<IProductModel>> GetProductsAsync();
+    Task<IEnumerable<IProductModel>> GetProductsByCategoryAsync(int id);
+    Task<IProductModel?> GetProductAsync(int id);
+    Task<ProductPutModel?> GetProductByEanAsync(string ean);
+    Task<int> GetProductCountAsync();
     Task PostProduct(ProductPostModel product);
     Task PutProduct(ProductPutModel product);
     Task PutProductAddCateogry(ProductPutAddCategoryModel product);

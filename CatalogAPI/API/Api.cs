@@ -22,10 +22,10 @@ public static class Api
     /// </summary>
     private static async Task<IResult> GetProducts(IProductData data, int page = 1, int pageSize = 3)
     {
-        var totalCount = await data.GetProductCount();
+        var totalCount = await data.GetProductCountAsync();
         var totalPages = (int)Math.Ceiling((decimal)totalCount / pageSize);
 
-        IEnumerable<IProductModel> products = await data.GetProducts();
+        IEnumerable<IProductModel> products = await data.GetProductsAsync();
 
         var productsPerPage = products.Skip((page - 1) * pageSize).Take(pageSize).ToList();
 
@@ -65,7 +65,7 @@ public static class Api
     {
         try
         {
-            return Results.Ok(await data.GetProductsByCategory(id));
+            return Results.Ok(await data.GetProductsByCategoryAsync(id));
         }
         catch (Exception ex)
         {
@@ -80,7 +80,7 @@ public static class Api
     {
         try
         {
-            var results = await data.GetProduct(id);
+            var results = await data.GetProductAsync(id);
             if (results == null) return Results.NotFound($"Product with ID {id} was not found.");
 
             return Results.Ok(results);
@@ -134,7 +134,7 @@ public static class Api
     /// </summary>
     public static async Task<IResult> PutProduct(ProductPutModel product, IProductData data)
     {
-        ProductPutModel? existingProduct = await data.GetProductByEan(product.Ean);
+        ProductPutModel? existingProduct = await data.GetProductByEanAsync(product.Ean);
 
         if (existingProduct == null) return Results.NotFound($"Product with ID {product.Ean} was not found.");
 
@@ -173,7 +173,7 @@ public static class Api
     /// </remarks>
     private static async Task<IResult> PutProductAddCategory(ProductPutAddCategoryModel product, IProductData data)
     {
-        IProductModel? existingProduct = await data.GetProduct(product.ProductId);
+        IProductModel? existingProduct = await data.GetProductAsync(product.ProductId);
 
         if (existingProduct == null) return Results.NotFound($"Product with ID {product.ProductId} was not found.");
         ProductPutAddCategoryModel ppacm = new ProductPutAddCategoryModel()

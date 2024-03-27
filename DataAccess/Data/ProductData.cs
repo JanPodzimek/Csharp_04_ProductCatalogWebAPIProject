@@ -19,7 +19,7 @@ public class ProductData : IProductData
         _db = db;
     }
 
-    public async Task<IEnumerable<IProductModel>> GetProducts()
+    public async Task<IEnumerable<IProductModel>> GetProductsAsync()
     {
         var products = await _db.LoadData<ProductModel, dynamic>("spProduct_GetAll", new { });
 
@@ -40,7 +40,7 @@ public class ProductData : IProductData
         return products;
     }
 
-    public async Task<IEnumerable<IProductModel>> GetProductsByCategory(int id)
+    public async Task<IEnumerable<IProductModel>> GetProductsByCategoryAsync(int id)
     {
         var products = await _db.LoadData<ProductModel, dynamic>("spProduct_GetByCategory", new { Id = id });
 
@@ -65,7 +65,7 @@ public class ProductData : IProductData
     }
 
 
-    public async Task<IProductModel?> GetProduct(int id)
+    public async Task<IProductModel?> GetProductAsync(int id)
     {
         var result = await _db.LoadData<ProductModel, dynamic>("spProduct_Get", new { Id = id });
 
@@ -95,7 +95,7 @@ public class ProductData : IProductData
         return product;
     }
 
-    public async Task<ProductPutModel?> GetProductByEan(string ean)
+    public async Task<ProductPutModel?> GetProductByEanAsync(string ean)
     {
         var result = await _db.LoadData<ProductPutModel, dynamic>("spProduct_GetByEan", new { Ean = ean });
         ProductPutModel? product = result.FirstOrDefault();
@@ -103,7 +103,7 @@ public class ProductData : IProductData
         return product;
     }
 
-    public async Task<int> GetProductCount()
+    public async Task<int> GetProductCountAsync()
     {
         var result = await _db.LoadData<ProductModel, dynamic>("spProduct_GetCount", new { });
         return result.Count();
@@ -128,7 +128,7 @@ public class ProductData : IProductData
 
         if (newProductData.Ean != null)
         {
-            existingProductData = GetProductByEan(newProductData.Ean).Result;
+            existingProductData = GetProductByEanAsync(newProductData.Ean).Result;
         }
 
         if (existingProductData != null) {
@@ -159,6 +159,6 @@ public class ProductData : IProductData
 
     public Task<bool> ProductExists(int id)
     {
-        return Task.FromResult(GetProducts().Result.Any(p => p.Id == id));
+        return Task.FromResult(GetProductsAsync().Result.Any(p => p.Id == id));
     }
 }
