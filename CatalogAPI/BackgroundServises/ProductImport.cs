@@ -63,10 +63,6 @@ public class ProductImport : BackgroundService
                 throw new Exception();
             }
 
-            
-
-            
-
             await Task.Delay(_timeout, stoppingToken);
         }
     }

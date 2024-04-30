@@ -6,6 +6,7 @@ namespace StatusService;
 public class StatusLogger : BackgroundService
 {
     private readonly ILogger<StatusLogger> _logger;
+    private TimeSpan _timeout = TimeSpan.FromSeconds(60);
     private HttpClient _httpClient;
 
     public StatusLogger(ILogger<StatusLogger> logger)
